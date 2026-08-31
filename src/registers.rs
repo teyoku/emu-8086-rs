@@ -4,7 +4,7 @@ pub struct Registers {
     pub ax: u16, // primary accumulator
     pub bx: u16, // base, accumulator
     pub cx: u16, // counter, accumulator
-    pub dx: u16, // accumulaotr, other functions
+    pub dx: u16, // accumulator, other functions
 
     // index registers
     pub si: u16, // Source Index
