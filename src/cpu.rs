@@ -1,15 +1,9 @@
 use crate::{
+    errors::{CpuError, MemoryError},
     instructions::{Instruction, Operand},
-    memory::{Memory, MemoryError},
+    memory::Memory,
     registers::Registers,
 };
-
-#[derive(Debug, PartialEq)]
-pub enum CpuError {
-    MemoryError(MemoryError),
-    UnknownOpcode(u8),
-    InvalidOperands
-}
 
 #[derive(Default)]
 pub struct Cpu {

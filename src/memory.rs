@@ -1,12 +1,9 @@
+use crate::errors::MemoryError;
+
 const MEMORY_SIZE: usize = 1_048_576; // 1 MB
 
 pub struct Memory {
     data: Box<[u8]>,
-}
-
-#[derive(Debug, PartialEq)]
-pub enum MemoryError {
-    OutOfBounds,
 }
 
 impl Memory {
