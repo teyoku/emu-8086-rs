@@ -4,7 +4,7 @@ pub struct Memory {
     data: Box<[u8]>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum MemoryError {
     OutOfBounds,
 }
