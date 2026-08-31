@@ -1,3 +1,4 @@
+pub mod memory;
 use std::{error::Error, fs};
 
 use clap::Parser;
@@ -11,7 +12,7 @@ struct Args {
 
 fn main() -> Result<(), Box<dyn Error>> {
     let args = Args::parse();
-    let input_bytes = fs::read_to_string(&args.file_path)?.into_bytes();
+    let input_bytes = fs::read(&args.file_path)?;
 
     println!("Bytes: {input_bytes:?}");
 
