@@ -1,32 +1,33 @@
 #[derive(Default)]
 pub struct Registers {
     // general-purpose registers
-    pub ax: u16,
-    pub bx: u16,
-    pub cx: u16,
-    pub dx: u16,
+    pub ax: u16, // primary accumulator
+    pub bx: u16, // base, accumulator
+    pub cx: u16, // counter, accumulator
+    pub dx: u16, // accumulaotr, other functions
 
     // index registers
-    pub si: u16,
-    pub di: u16,
+    pub si: u16, // Source Index
+    pub di: u16, // Destination Index
 
     // pointer registers
-    pub sp: u16,
-    pub bp: u16,
+    pub sp: u16, // Stack Pointer
+    pub bp: u16, // Base Pointer
 
     // instruction pointer
     pub ip: u16,
 
     // segment registers
-    pub cs: u16,
-    pub ds: u16,
-    pub ss: u16,
-    pub es: u16,
+    pub cs: u16, // Code Segment
+    pub ds: u16, // Data Segment
+    pub ss: u16, // Stack Segment
+    pub es: u16, // Extra Segment
 
     // flags
     pub flags: u16,
 }
 
+#[derive(Debug, PartialEq)]
 pub enum Register8Bit {
     Ah,
     Al,
@@ -38,6 +39,7 @@ pub enum Register8Bit {
     Dl,
 }
 
+#[derive(Debug, PartialEq)]
 pub enum Register16Bit {
     Ax,
     Bx,
