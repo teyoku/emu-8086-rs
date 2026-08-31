@@ -1,5 +1,5 @@
 use crate::{
-    cpu::Cpu,
+    cpu::{Cpu, CpuError},
     memory::Memory,
     registers::{Register8Bit, Register16Bit},
 };
@@ -18,20 +18,20 @@ pub enum Instruction {
     Hlt,
 }
 
-pub fn decode(opcode: u8, cpu: &mut Cpu, memory: &Memory) -> Result<Instruction, String> {
+pub fn decode(opcode: u8, cpu: &mut Cpu, memory: &Memory) -> Result<Instruction, CpuError> {
     match opcode {
         0xF4 => Ok(Instruction::Hlt),
         0xB0 => {
             let byte = cpu
                 .fetch_byte(memory)
-                .map_err(|_| format!("Out of memory"))?;
+                .map_err(|err| CpuError::MemoryError(err))?;
 
             Ok(Instruction::Mov {
                 dest: Operand::Reg8(Register8Bit::Al),
                 src: Operand::Immediate8(byte),
             })
         }
-        _ => Err(format!("Unknown opcode: 0x{:02X}", opcode)),
+        _ => Err(CpuError::UnknownOpcode(opcode)),
     }
 }
 
