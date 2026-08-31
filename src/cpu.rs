@@ -1,7 +1,15 @@
 use crate::{
+    instructions::{Instruction, Operand},
     memory::{Memory, MemoryError},
     registers::Registers,
 };
+
+#[derive(Debug, PartialEq)]
+pub enum CpuError {
+    MemoryError(MemoryError),
+    UnknownOpcode(u8),
+    InvalidOperands
+}
 
 #[derive(Default)]
 pub struct Cpu {
@@ -19,6 +27,27 @@ impl Cpu {
 
         self.registers.ip = self.registers.ip.wrapping_add(1);
         Ok(byte)
+    }
+
+    pub fn execute(
+        &mut self,
+        instruction: Instruction,
+        memory: &mut Memory,
+    ) -> Result<bool, CpuError> {
+        match instruction {
+            Instruction::Hlt => Ok(false),
+            Instruction::Mov { dest, src } => {
+                if let Operand::Reg8(reg) = dest
+                    && let Operand::Immediate8(value) = src
+                {
+                    self.registers.set_8bit(&reg, value);
+                } else {
+                    return Err(CpuError::InvalidOperands);
+                }
+
+                Ok(true)
+            }
+        }
     }
 }
 
