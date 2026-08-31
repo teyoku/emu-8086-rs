@@ -1,3 +1,4 @@
+pub mod registers;
 pub mod memory;
 use std::{error::Error, fs};
 
