@@ -24,7 +24,7 @@ impl std::fmt::Display for CpuError {
         match self {
             CpuError::MemoryError(memory_error) => memory_error.fmt(f),
             CpuError::UnknownOpcode(opcode) => write!(f, "Unknown opcode: 0x{:02X}", opcode),
-            CpuError::InvalidOperands => write!(f, "Invalud operands"),
+            CpuError::InvalidOperands => write!(f, "Invalid operands"),
         }
     }
 }
