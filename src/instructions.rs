@@ -11,12 +11,15 @@ pub enum Operand {
     Reg16(Register16Bit),
     Immediate8(u8),
     Immediate16(u16),
+    Relative8(i8),
 }
 
 #[derive(Debug, PartialEq)]
 pub enum Instruction {
     Mov { dest: Operand, src: Operand },
     Add { dest: Operand, src: Operand },
+    Jmp { offset: Operand },
+    Jz { offset: Operand },
     Hlt,
 }
 
@@ -55,6 +58,26 @@ pub fn decode(opcode: u8, cpu: &mut Cpu, memory: &Memory) -> Result<Instruction,
             Ok(Instruction::Add {
                 dest: Operand::Reg8(Register8Bit::Al),
                 src: Operand::Immediate8(byte),
+            })
+        }
+        // JMP
+        0xEB => {
+            let byte = cpu
+                .fetch_byte(memory)
+                .map_err(|err| CpuError::MemoryError(err))?;
+
+            Ok(Instruction::Jmp {
+                offset: Operand::Relative8(byte as i8),
+            })
+        }
+        // JZ
+        0x74 => {
+            let byte = cpu
+                .fetch_byte(memory)
+                .map_err(|err| CpuError::MemoryError(err))?;
+
+            Ok(Instruction::Jz {
+                offset: Operand::Relative8(byte as i8),
             })
         }
         _ => Err(CpuError::UnknownOpcode(opcode)),
