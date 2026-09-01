@@ -21,7 +21,9 @@ pub enum Instruction {
 
 pub fn decode(opcode: u8, cpu: &mut Cpu, memory: &Memory) -> Result<Instruction, CpuError> {
     match opcode {
+        // HALT
         0xF4 => Ok(Instruction::Hlt),
+        // MOV AL, imm8
         0xB0 => {
             let byte = cpu
                 .fetch_byte(memory)
@@ -32,11 +34,12 @@ pub fn decode(opcode: u8, cpu: &mut Cpu, memory: &Memory) -> Result<Instruction,
                 src: Operand::Immediate8(byte),
             })
         }
+        // MOV AX, imm16
         0xB8 => {
             let word = cpu
                 .fetch_word(memory)
                 .map_err(|err| CpuError::MemoryError(err))?;
-            
+
             Ok(Instruction::Mov {
                 dest: Operand::Reg16(Register16Bit::Ax),
                 src: Operand::Immediate16(word),
