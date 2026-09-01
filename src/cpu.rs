@@ -46,7 +46,21 @@ impl Cpu {
                     (Operand::Reg16(reg), Operand::Immediate16(value)) => {
                         self.registers.set_16bit(&reg, value);
                     }
-                    _ => return Err(CpuError::InvalidOperands)
+                    _ => return Err(CpuError::InvalidOperands),
+                }
+
+                Ok(true)
+            }
+            Instruction::Add { dest, src } => {
+                match (dest, src) {
+                    // sets 8bit value to 8bit reg
+                    (Operand::Reg8(reg), Operand::Immediate8(value)) => {
+                        let reg_value = self.registers.get_8bit(&reg);
+                        let result = reg_value.wrapping_add(value);
+                        self.registers.set_8bit(&reg, result);
+                        self.registers.update_flags_8bit(result);
+                    }
+                    _ => return Err(CpuError::InvalidOperands),
                 }
 
                 Ok(true)
