@@ -33,9 +33,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     loop {
         let opcode = cpu.fetch_byte(&memory)?;
         let instruction = decode(opcode, &mut cpu, &memory)?;
-        let should_stop = cpu.execute(instruction, &mut memory)?;
+        let keep_running = cpu.execute(instruction, &mut memory)?;
 
-        if should_stop {
+        if !keep_running {
             break;
         }
     }
