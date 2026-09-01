@@ -65,6 +65,29 @@ impl Cpu {
 
                 Ok(true)
             }
+            Instruction::Jmp { offset } => {
+                match offset {
+                    Operand::Relative8(offset) => {
+                        self.registers.ip = self.registers.ip.wrapping_add_signed(offset as i16);
+                    }
+                    _ => return Err(CpuError::InvalidOperands),
+                }
+
+                Ok(true)
+            }
+            Instruction::Jz { offset } => {
+                match offset {
+                    Operand::Relative8(offset) => {
+                        if self.registers.get_zero_flag() {
+                            self.registers.ip =
+                                self.registers.ip.wrapping_add_signed(offset as i16);
+                        }
+                    }
+                    _ => return Err(CpuError::InvalidOperands),
+                }
+
+                Ok(true)
+            }
         }
     }
 }
