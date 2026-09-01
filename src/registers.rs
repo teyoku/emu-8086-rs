@@ -117,6 +117,10 @@ impl Registers {
         let sign_bit = ((result as u16 >> 7) & 0x1) << 7;
         self.flags = (self.flags & !sign_flag_mask) | sign_bit;
     }
+
+    pub fn get_zero_flag(&self) -> bool {
+        ((self.flags >> 6) & 0x1) == 1
+    }
 }
 
 #[cfg(test)]
