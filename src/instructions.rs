@@ -16,6 +16,7 @@ pub enum Operand {
 #[derive(Debug, PartialEq)]
 pub enum Instruction {
     Mov { dest: Operand, src: Operand },
+    Add { dest: Operand, src: Operand },
     Hlt,
 }
 
@@ -43,6 +44,17 @@ pub fn decode(opcode: u8, cpu: &mut Cpu, memory: &Memory) -> Result<Instruction,
             Ok(Instruction::Mov {
                 dest: Operand::Reg16(Register16Bit::Ax),
                 src: Operand::Immediate16(word),
+            })
+        }
+        // ADD AL, imm8
+        0x04 => {
+            let byte = cpu
+                .fetch_byte(memory)
+                .map_err(|err| CpuError::MemoryError(err))?;
+
+            Ok(Instruction::Add {
+                dest: Operand::Reg8(Register8Bit::Al),
+                src: Operand::Immediate8(byte),
             })
         }
         _ => Err(CpuError::UnknownOpcode(opcode)),
