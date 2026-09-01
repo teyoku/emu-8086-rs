@@ -40,5 +40,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     }
 
+    println!("Program has finished. Registers state:\n{:#?}", cpu.registers);
+
     Ok(())
 }
