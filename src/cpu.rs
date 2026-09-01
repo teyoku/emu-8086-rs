@@ -23,6 +23,12 @@ impl Cpu {
         Ok(byte)
     }
 
+    pub fn fetch_word(&mut self, memory: &Memory) -> Result<u16, MemoryError> {
+        let low = self.fetch_byte(memory)?;
+        let high = self.fetch_byte(memory)?;
+        Ok(u16::from_le_bytes([low, high]))
+    }
+
     pub fn execute(
         &mut self,
         instruction: Instruction,
@@ -31,12 +37,16 @@ impl Cpu {
         match instruction {
             Instruction::Hlt => Ok(false),
             Instruction::Mov { dest, src } => {
-                if let Operand::Reg8(reg) = dest
-                    && let Operand::Immediate8(value) = src
-                {
-                    self.registers.set_8bit(&reg, value);
-                } else {
-                    return Err(CpuError::InvalidOperands);
+                match (dest, src) {
+                    // sets 8bit value to 8bit reg
+                    (Operand::Reg8(reg), Operand::Immediate8(value)) => {
+                        self.registers.set_8bit(&reg, value);
+                    }
+                    // sets 16bit value to 16bit reg
+                    (Operand::Reg16(reg), Operand::Immediate16(value)) => {
+                        self.registers.set_16bit(&reg, value);
+                    }
+                    _ => return Err(CpuError::InvalidOperands)
                 }
 
                 Ok(true)
