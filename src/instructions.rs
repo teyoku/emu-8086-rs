@@ -32,6 +32,16 @@ pub fn decode(opcode: u8, cpu: &mut Cpu, memory: &Memory) -> Result<Instruction,
                 src: Operand::Immediate8(byte),
             })
         }
+        0xB8 => {
+            let word = cpu
+                .fetch_word(memory)
+                .map_err(|err| CpuError::MemoryError(err))?;
+            
+            Ok(Instruction::Mov {
+                dest: Operand::Reg16(Register16Bit::Ax),
+                src: Operand::Immediate16(word),
+            })
+        }
         _ => Err(CpuError::UnknownOpcode(opcode)),
     }
 }
