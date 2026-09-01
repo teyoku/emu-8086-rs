@@ -103,6 +103,20 @@ impl Registers {
             Register16Bit::Bp => self.bp = value,
         }
     }
+
+    pub fn update_flags_8bit(&mut self, result: u8) {
+        let zero_flag_mask: u16 = 1 << 6;
+        let sign_flag_mask: u16 = 1 << 7;
+
+        self.flags = if result == 0 {
+            self.flags | zero_flag_mask
+        } else {
+            self.flags & !zero_flag_mask
+        };
+
+        let sign_bit = ((result as u16 >> 7) & 0x1) << 7;
+        self.flags = (self.flags & !sign_flag_mask) | sign_bit;
+    }
 }
 
 #[cfg(test)]
