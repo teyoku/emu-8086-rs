@@ -1,4 +1,4 @@
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct Registers {
     // general-purpose registers
     pub ax: u16, // primary accumulator
