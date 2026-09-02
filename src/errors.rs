@@ -30,3 +30,9 @@ impl std::fmt::Display for CpuError {
 }
 
 impl std::error::Error for CpuError {}
+
+impl From<MemoryError> for CpuError {
+    fn from(value: MemoryError) -> Self {
+        CpuError::MemoryError(value)
+    }
+}

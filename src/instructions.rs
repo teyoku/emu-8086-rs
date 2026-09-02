@@ -29,9 +29,7 @@ pub fn decode(opcode: u8, cpu: &mut Cpu, memory: &Memory) -> Result<Instruction,
         0xF4 => Ok(Instruction::Hlt),
         // MOV AL, imm8
         0xB0 => {
-            let byte = cpu
-                .fetch_byte(memory)
-                .map_err(|err| CpuError::MemoryError(err))?;
+            let byte = cpu.fetch_byte(memory)?;
 
             Ok(Instruction::Mov {
                 dest: Operand::Reg8(Register8Bit::Al),
@@ -40,9 +38,7 @@ pub fn decode(opcode: u8, cpu: &mut Cpu, memory: &Memory) -> Result<Instruction,
         }
         // MOV AX, imm16
         0xB8 => {
-            let word = cpu
-                .fetch_word(memory)
-                .map_err(|err| CpuError::MemoryError(err))?;
+            let word = cpu.fetch_word(memory)?;
 
             Ok(Instruction::Mov {
                 dest: Operand::Reg16(Register16Bit::Ax),
@@ -51,9 +47,7 @@ pub fn decode(opcode: u8, cpu: &mut Cpu, memory: &Memory) -> Result<Instruction,
         }
         // ADD AL, imm8
         0x04 => {
-            let byte = cpu
-                .fetch_byte(memory)
-                .map_err(|err| CpuError::MemoryError(err))?;
+            let byte = cpu.fetch_byte(memory)?;
 
             Ok(Instruction::Add {
                 dest: Operand::Reg8(Register8Bit::Al),
@@ -62,9 +56,7 @@ pub fn decode(opcode: u8, cpu: &mut Cpu, memory: &Memory) -> Result<Instruction,
         }
         // JMP
         0xEB => {
-            let byte = cpu
-                .fetch_byte(memory)
-                .map_err(|err| CpuError::MemoryError(err))?;
+            let byte = cpu.fetch_byte(memory)?;
 
             Ok(Instruction::Jmp {
                 offset: Operand::Relative8(byte as i8),
@@ -72,9 +64,7 @@ pub fn decode(opcode: u8, cpu: &mut Cpu, memory: &Memory) -> Result<Instruction,
         }
         // JZ
         0x74 => {
-            let byte = cpu
-                .fetch_byte(memory)
-                .map_err(|err| CpuError::MemoryError(err))?;
+            let byte = cpu.fetch_byte(memory)?;
 
             Ok(Instruction::Jz {
                 offset: Operand::Relative8(byte as i8),
