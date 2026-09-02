@@ -24,11 +24,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut memory = Memory::new();
     let mut cpu = Cpu::default();
 
-
-    // load program into memory
-    for (i, byte) in input_bytes.iter().enumerate() {
-        memory.write_byte(0x0000 + i, *byte)?;
-    }
+    memory.load_program(&input_bytes, 0)?;
 
     loop {
         let opcode = cpu.fetch_byte(&memory)?;

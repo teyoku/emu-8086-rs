@@ -53,6 +53,21 @@ impl Memory {
             Ok(())
         }
     }
+
+    pub fn load_program(&mut self, program: &[u8], offset: usize) -> Result<(), MemoryError> {
+        if offset >= self.data.len() {
+            return Err(MemoryError::OutOfBounds);
+        }
+
+        let end = offset + program.len();
+        if end > self.data.len() {
+            return Err(MemoryError::OutOfBounds);
+        }
+
+        self.data[offset..end].copy_from_slice(program);
+
+        Ok(())
+    }
 }
 
 #[cfg(test)]
